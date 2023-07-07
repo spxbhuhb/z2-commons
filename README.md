@@ -1,0 +1,1 @@
+Common utility functions for Kotlin Multiplatform programming.
