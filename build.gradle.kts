@@ -14,6 +14,36 @@ val coroutines_version: String by project
 val serialization_version: String by project
 val datetime_version: String by project
 
+kotlin {
+    jvm {
+        jvmToolchain(11)
+    }
+    js(IR) {
+        browser()
+        binaries.library()
+    }
+    sourceSets {
+        commonMain {
+            dependencies {
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
+                api("org.jetbrains.kotlinx:kotlinx-serialization-json:$serialization_version")
+                api("org.jetbrains.kotlinx:kotlinx-datetime:$datetime_version")
+            }
+        }
+        commonTest {
+            dependencies {
+                implementation(kotlin("test-common"))
+                implementation(kotlin("test-annotations-common"))
+                implementation(kotlin("test-junit"))
+            }
+        }
+    }
+}
+
+// ----------------------------------------------------------------
+// DO NOT EDIT BELOW THIS, ASK FIRST!
+// ----------------------------------------------------------------
+
 val publishSnapshotUrl = (System.getenv("Z2_PUBLISH_SNAPSHOT_URL") ?: project.findProperty("z2.publish.snapshot.url"))?.toString()
 val publishReleaseUrl = (System.getenv("Z2_PUBLISH_RELEASE_URL") ?: project.findProperty("z2.publish.release.url"))?.toString()
 val publishUsername = (System.getenv("Z2_PUBLISH_USERNAME") ?: project.findProperty("z2.publish.username"))?.toString()
@@ -40,37 +70,6 @@ repositories {
     publishSnapshotUrl?.let { mavenRepo(it) }
     publishReleaseUrl?.let { mavenRepo(it) }
 }
-
-kotlin {
-    jvm {
-        jvmToolchain(11)
-    }
-    js(IR) {
-        browser()
-        binaries.library()
-    }
-    sourceSets {
-        commonMain {
-            dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serialization_version")
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:$datetime_version")
-            }
-        }
-        commonTest {
-            dependencies {
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
-                implementation(kotlin("test-junit"))
-            }
-        }
-    }
-}
-
-// ----------------------------------------------------------------
-// DO NOT EDIT BELOW THIS, ASK FIRST!
-// ----------------------------------------------------------------
-
 
 if (isPublishing) {
     tasks.withType<Jar> {
@@ -125,5 +124,4 @@ if (isPublishing) {
             }
         }
     }
-
 }
