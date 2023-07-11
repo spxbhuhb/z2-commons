@@ -6,19 +6,19 @@ import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
 @PublicApi
-open class LocalizedStringStore(
+open class LocalizedTextStore(
     @PublicApi
-    val uuid : UUID<LocalizedStringStore>
+    val uuid : UUID<LocalizedTextStore>
 ) {
     val map: MutableMap<String, LocalizedText> = mutableMapOf()
 
-    class LocalizedTextDelegate : ReadOnlyProperty<LocalizedStringStore, LocalizedText> {
-        override fun getValue(thisRef: LocalizedStringStore, property: KProperty<*>): LocalizedText {
+    class LocalizedTextDelegate : ReadOnlyProperty<LocalizedTextStore, LocalizedText> {
+        override fun getValue(thisRef: LocalizedTextStore, property: KProperty<*>): LocalizedText {
             return thisRef.map[property.name] !!
         }
     }
 
-    operator fun String.provideDelegate(thisRef: LocalizedStringStore, prop: KProperty<*>): ReadOnlyProperty<LocalizedStringStore, LocalizedText> {
+    operator fun String.provideDelegate(thisRef: LocalizedTextStore, prop: KProperty<*>): ReadOnlyProperty<LocalizedTextStore, LocalizedText> {
         thisRef.map[prop.name] = BasicLocalizedText(this)
         return LocalizedTextDelegate()
     }

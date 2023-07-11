@@ -4,11 +4,11 @@ import hu.simplexion.z2.commons.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class  LocalizedStringStoreTest {
+class  LocalizedTextStoreTest {
 
     @Test
     fun test() {
-        val store = object : LocalizedStringStore(UUID()) {
+        val store = object : LocalizedTextStore(UUID()) {
             val a by "A"
             val b by "B"
         }
