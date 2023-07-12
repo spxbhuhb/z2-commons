@@ -6,6 +6,8 @@
 
 Common utility functions for Kotlin Multiplatform programming.
 
+Status: **experimental**
+
 # Dependency
 
 ```kotlin
