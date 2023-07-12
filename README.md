@@ -4,17 +4,17 @@
 [![GitHub License](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0)
 ![Kotlin](https://img.shields.io/github/languages/top/spxbhuhb/z2-commons)
 
-Common utility functions for Kotlin Multiplatform programming.
+Common utility functions for Kotlin Multiplatform programming. Part of [Z2](https://github.com/spxbhuhb/z2).
 
 Status: **experimental**
 
-# Dependency
+## Dependency
 
 ```kotlin
 implementation("hu.simplexion.z2:z2-commons:2023.7.12")
 ```
 
-# Utility Functions
+## Utility Functions
 
 | Type  | Name                                                                                  | Function                                 | Platform |
 |-------|---------------------------------------------------------------------------------------|------------------------------------------|----------|
@@ -23,7 +23,7 @@ implementation("hu.simplexion.z2:z2-commons:2023.7.12")
 | fun   | [`vmNowMicro`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/clock.kt)          | Virtual machine time in microseconds.    | Js, JVM  |
 | class | [`UUID`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/uuid.kt)                 | Type bound UUID 4 implementation         | Js, JVM  |
 
-# I18N
+## I18N
 
 * [Commons](https://github.com/spxbhuhb/z2-commons) is enough for single-language applications
 * [I18N](https://github.com/spxbhuhb/z2-i18n) is intended for multi-language applications
