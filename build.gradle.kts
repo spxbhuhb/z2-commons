@@ -67,8 +67,6 @@ repositories {
     mavenLocal()
     mavenCentral()
     google()
-    publishSnapshotUrl?.let { mavenRepo(it) }
-    publishReleaseUrl?.let { mavenRepo(it) }
 }
 
 if (isPublishing) {
