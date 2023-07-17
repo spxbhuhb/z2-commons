@@ -23,6 +23,12 @@ implementation("hu.simplexion.z2:z2-commons:2023.7.17")
 | fun   | [`vmNowMicro`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/clock.kt)          | Virtual machine time in microseconds.    | Js, JVM  |
 | class | [`UUID`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/uuid.kt)                 | Type bound UUID 4 implementation         | Js, JVM  |
 
+Only in snapshot:
+
+| Type  | Name                                                                               | Function                                                              | Platform |
+|-------|------------------------------------------------------------------------------------|-----------------------------------------------------------------------|----------|
+| fun   | [`localLaunch`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/coroutines.kt) | Create a scope with `Dispatchers.Default` and launch the block in it. | Common   |
+
 ## I18N
 
 * [Commons](https://github.com/spxbhuhb/z2-commons) is enough for single-language applications
