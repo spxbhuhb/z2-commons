@@ -1,6 +1,6 @@
 # Z2 Commons
 
-[![Maven Central](https://img.shields.io/maven-central/v/hu.simplexion.z2/z2-commons)](https://mvnrepository.com/artifact/hu.simplexion.z2/z2-core)
+[![Maven Central](https://img.shields.io/maven-central/v/hu.simplexion.z2/z2-commons)](https://mvnrepository.com/artifact/hu.simplexion.z2/z2-commons)
 [![GitHub License](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0)
 ![Kotlin](https://img.shields.io/github/languages/top/spxbhuhb/z2-commons)
 
@@ -11,7 +11,7 @@ Status: **experimental**
 ## Dependency
 
 ```kotlin
-implementation("hu.simplexion.z2:z2-commons:2023.7.12")
+implementation("hu.simplexion.z2:z2-commons:2023.7.17")
 ```
 
 ## Utility Functions
