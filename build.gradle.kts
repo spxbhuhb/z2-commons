@@ -9,10 +9,19 @@ plugins {
 }
 
 group = "hu.simplexion.z2"
+val baseName = "z2-commons"
+val pomName = "Z2 Commons"
+val scmPath = "spxbhuhb/z2-commons"
 
 val coroutines_version: String by project
 val serialization_version: String by project
 val datetime_version: String by project
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    google()
+}
 
 kotlin {
     jvm {
@@ -63,10 +72,8 @@ fun RepositoryHandler.mavenRepo(repoUrl: String) {
     }
 }
 
-repositories {
-    mavenLocal()
-    mavenCentral()
-    google()
+val javadocJar by tasks.registering(Jar::class) {
+    archiveClassifier.set("javadoc")
 }
 
 if (isPublishing) {
@@ -102,21 +109,32 @@ if (isPublishing) {
         }
 
         publications.withType<MavenPublication>().all {
-            val path = "spxbhuhb/${project.name}"
+
+            artifact(javadocJar.get())
 
             pom {
                 description.set(project.name)
-                name.set(project.name)
-                url.set("https://github.com/$path")
+                name.set(pomName)
+                url.set("https://github.com/$scmPath")
                 scm {
-                    url.set("https://github.com/$path")
-                    connection.set("scm:git:git://github.com/$path.git")
-                    developerConnection.set("scm:git:ssh://git@github.com/$path.git")
+                    url.set("https://github.com/$scmPath")
+                    connection.set("scm:git:git://github.com/$scmPath.git")
+                    developerConnection.set("scm:git:ssh://git@github.com/$scmPath.git")
                 }
                 licenses {
                     license {
-                        name.set("proprietary")
+                        name.set("Apache 2.0")
+                        url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
                         distribution.set("repo")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("toth-istvan-zoltan")
+                        name.set("Tóth István Zoltán")
+                        url.set("https://github.com/toth-istvan-zoltan")
+                        organization.set("Simplexion Kft.")
+                        organizationUrl.set("https://www.simplexion.hu")
                     }
                 }
             }
