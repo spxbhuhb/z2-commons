@@ -11,22 +11,26 @@ Status: **experimental**
 ## Dependency
 
 ```kotlin
-implementation("hu.simplexion.z2:z2-commons:2023.7.17")
+implementation("hu.simplexion.z2:z2-commons:2023.7.18-SNAPSHOT")
 ```
+
+## Protobuf
+
+Low level functions for reading and writing [Protocol Buffer](https://protobuf.dev/) messages.
+
+| Type  | Name                                                                                    | Function                   | Platform |
+|-------|-----------------------------------------------------------------------------------------|----------------------------|----------|
+| class | [`ProtoReader`](src/commonMain/kotlin/hu/simplexion/z2/commons/protobuf/ProtoReader.kt) | Low level protobuf reader. | Common   |
+| class | [`ProtoWriter`](src/commonMain/kotlin/hu/simplexion/z2/commons/protobuf/ProtoWriter.kt) | Low level protobuf writer. | Common   |
+
 
 ## Utility Functions
 
-| Type  | Name                                                                                  | Function                                 | Platform |
-|-------|---------------------------------------------------------------------------------------|------------------------------------------|----------|
-| fun   | [`ByteArray.toHexString`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/hex.kt) | Converts a byte array into a hex string. | Common   |
-| fun   | [`fourRandomInt`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/random.kt)      | Get 4 random Int values.                 | Js, JVM  |
-| fun   | [`vmNowMicro`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/clock.kt)          | Virtual machine time in microseconds.    | Js, JVM  |
-| class | [`UUID`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/uuid.kt)                 | Type bound UUID 4 implementation         | Js, JVM  |
-
-Only in snapshot:
-
 | Type  | Name                                                                               | Function                                                              | Platform |
 |-------|------------------------------------------------------------------------------------|-----------------------------------------------------------------------|----------|
+| fun   | [`fourRandomInt`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/random.kt)   | Get 4 random Int values.                                              | Js, JVM  |
+| fun   | [`vmNowMicro`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/clock.kt)       | Virtual machine time in microseconds.                                 | Js, JVM  |
+| class | [`UUID`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/uuid.kt)              | Type bound UUID 4 implementation                                      | Js, JVM  |
 | fun   | [`localLaunch`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/coroutines.kt) | Create a scope with `Dispatchers.Default` and launch the block in it. | Common   |
 
 ## I18N
