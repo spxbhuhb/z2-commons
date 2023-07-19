@@ -6,10 +6,10 @@ import kotlin.test.assertEquals
 class ProtoWriterTest {
 
     @OptIn(ExperimentalStdlibApi::class)
-    fun proto(builder: ProtoWriter.() -> Unit): String {
-        val writer = ProtoWriter()
+    fun proto(builder: ProtoBufferWriter.() -> Unit): String {
+        val writer = ProtoBufferWriter()
         writer.builder()
-        return writer.buffer.toHexString(0, writer.size)
+        return writer.data.toHexString(0, writer.size)
     }
 
     val String.ns

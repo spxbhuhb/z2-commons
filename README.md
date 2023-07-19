@@ -18,11 +18,10 @@ implementation("hu.simplexion.z2:z2-commons:2023.7.18-SNAPSHOT")
 
 Low level functions for reading and writing [Protocol Buffer](https://protobuf.dev/) messages.
 
-| Type  | Name                                                                                    | Function                   | Platform |
-|-------|-----------------------------------------------------------------------------------------|----------------------------|----------|
-| class | [`ProtoReader`](src/commonMain/kotlin/hu/simplexion/z2/commons/protobuf/ProtoReader.kt) | Low level protobuf reader. | Common   |
-| class | [`ProtoWriter`](src/commonMain/kotlin/hu/simplexion/z2/commons/protobuf/ProtoWriter.kt) | Low level protobuf writer. | Common   |
-
+| Type  | Name                                                                                                | Function                   | Platform |
+|-------|-----------------------------------------------------------------------------------------------------|----------------------------|----------|
+| class | [`ProtoBufferReader`](src/commonMain/kotlin/hu/simplexion/z2/commons/protobuf/ProtoBufferReader.kt) | Low level protobuf reader. | Common   |
+| class | [`ProtoBufferWriter`](src/commonMain/kotlin/hu/simplexion/z2/commons/protobuf/ProtoBufferWriter.kt) | Low level protobuf writer. | Common   |
 
 ## Utility Functions
 
