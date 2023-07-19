@@ -27,21 +27,35 @@ class ProtoBufferReader(
     fun records(): List<ProtoRecord> {
         val records = mutableListOf<ProtoRecord>()
 
+        readOffset = offset
         val readEnd = offset + length
 
         while (readOffset < readEnd) {
-            val startOffset = readOffset
             val tag = varint()
-            val fieldNumber = (tag shr 3).toLong()
+            val fieldNumber = (tag shr 3).toInt()
             val type = (tag and 7UL).toInt()
 
-            records += when (type) {
-                VARINT -> VarintProtoRecord(fieldNumber, varint())
-                I64 -> I64ProtoRecord(fieldNumber, i64())
-                I32 -> I32ProtoRecord(fieldNumber, i32())
-                LEN -> LenProtoRecord(fieldNumber, buffer, readOffset, varint().toInt())
-                else -> throw IllegalArgumentException("unknown type $type at $startOffset")
-            }
+            records += value(fieldNumber, type)
+        }
+
+        // the reader should read all data, not less, not more
+        check(readOffset - offset == length) { "read length mismatch, structural problem in the message or software bug" }
+
+        return records
+    }
+
+    /**
+     * Convert the byte array into a list of [ProtoRecord]. Meant to read packed
+     * repeated fields.
+     */
+    fun packedRecords(fieldNumber : Int, type : Int) : List<ProtoRecord> {
+        val records = mutableListOf<ProtoRecord>()
+
+        readOffset = offset
+        val readEnd = offset + length
+
+        while (readOffset < readEnd) {
+            records += value(fieldNumber, type)
         }
 
         // the reader should read all data, not less, not more
@@ -51,10 +65,25 @@ class ProtoBufferReader(
         return records
     }
 
+    private fun value(fieldNumber: Int, type : Int) =
+        when (type) {
+            VARINT -> VarintProtoRecord(fieldNumber, varint())
+            I64 -> I64ProtoRecord(fieldNumber, i64())
+            I32 -> I32ProtoRecord(fieldNumber, i32())
+            LEN -> {
+                val length = varint().toInt()
+                LenProtoRecord(fieldNumber, buffer, readOffset, length).also {
+                    readOffset += length
+                }
+            }
+            else -> throw IllegalArgumentException("unknown type $type")
+        }
+
+    private var endOffset = offset + length
     private var readOffset = offset
 
     private fun get(): ULong {
-        check(readOffset < length)
+        check(readOffset < endOffset)
         return buffer[readOffset++].toULong() and 0xffUL
     }
 

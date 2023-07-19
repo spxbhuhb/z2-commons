@@ -1,5 +1,6 @@
 package hu.simplexion.z2.commons.protobuf
 
+import hu.simplexion.z2.commons.util.UUID
 import kotlin.experimental.or
 import kotlin.math.max
 
@@ -31,26 +32,30 @@ class ProtoBufferWriter(
         get() = pastBufferByteCount + writeOffset
 
     /**
-     * Data written.
+     * Pack all the buffers into one.
      */
-    val data: ByteArray
-        get() = pack()
+    fun pack(): ByteArray {
+        val data = ByteArray(size)
+        var offset = 0
+        val last = buffers.last()
+        for (buffer in buffers) {
+            if (buffer !== last) {
+                buffer.copyInto(data, offset)
+            } else {
+                buffer.copyInto(data, offset, 0, writeOffset)
+            }
+            offset += buffer.size
+        }
+        return data
+    }
 
     fun bool(fieldNumber: Int, value: Boolean) {
         tag(fieldNumber, VARINT)
         if (value) varint(1UL) else varint(0UL)
     }
 
-    fun bool(value: Boolean) {
-        if (value) varint(1UL) else varint(0UL)
-    }
-
     fun int32(fieldNumber: Int, value: Int) {
         tag(fieldNumber, VARINT)
-        varint(value.toULong())
-    }
-
-    fun int32(value: Int) {
         varint(value.toULong())
     }
 
@@ -114,8 +119,9 @@ class ProtoBufferWriter(
         put(value.encodeToByteArray())
     }
 
-    fun string(value: String) {
-        put(value.encodeToByteArray())
+    fun uuid(fieldNumber : Int, value : UUID<*>) {
+        tag(fieldNumber, LEN)
+        string(value.toString())
     }
 
     fun bytes(fieldNumber: Int, value: ByteArray) {
@@ -123,7 +129,27 @@ class ProtoBufferWriter(
         put(value)
     }
 
-    fun bytes(value: ByteArray) {
+    // ------------------------------------------------------------------------
+    // Functions without tag number, these are dangerous
+    // ------------------------------------------------------------------------
+
+    internal fun bool(value: Boolean) {
+        if (value) varint(1UL) else varint(0UL)
+    }
+
+    internal fun int32(value: Int) {
+        varint(value.toULong())
+    }
+
+    internal fun string(value: String) {
+        put(value.encodeToByteArray())
+    }
+
+    internal fun uuid(value : UUID<*>) {
+        string(value.toString())
+    }
+
+    internal fun bytes(value: ByteArray) {
         put(value)
     }
 
@@ -202,6 +228,8 @@ class ProtoBufferWriter(
      * [maximumBufferSize] allows) to hold all the remaining data.
      */
     private fun put(byteArray: ByteArray) {
+        varint(byteArray.size.toULong())
+
         var availableSpace = buffer.size - writeOffset
         var copyOffset = 0
         var remaining = byteArray.size
@@ -229,24 +257,6 @@ class ProtoBufferWriter(
         buffer = ByteArray(requestedSize)
         buffers.add(buffer)
         writeOffset = 0
-    }
-
-    /**
-     * Pack all the buffers into one.
-     */
-    private fun pack(): ByteArray {
-        val data = ByteArray(size)
-        var offset = 0
-        val last = buffers.last()
-        for (buffer in buffers) {
-            if (buffer !== last) {
-                buffer.copyInto(data, offset)
-            } else {
-                buffer.copyInto(data, offset, 0, writeOffset)
-            }
-            offset += buffer.size
-        }
-        return data
     }
 
     // ------------------------------------------------------------------------

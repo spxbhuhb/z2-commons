@@ -1,67 +1,94 @@
 package hu.simplexion.z2.commons.protobuf
 
-internal object ProtoBoolean : ProtoDecoder<Boolean>,ProtoEncoder<Boolean> {
+abstract class ProtoList<T>(
+    val fieldNumber: Int,
+    val packed: Boolean = false,
+    val packedType: Int = 0
+) : ProtoEncoder<List<T>>, ProtoDecoder<List<T>> {
 
-    override fun decodeFrom(record: ProtoRecord): Boolean =
-        record.bool()
+    abstract fun encodeItemInto(writer: ProtoBufferWriter, value: T)
 
-    override fun encodeInto(writer: ProtoBufferWriter, data: Boolean) {
-        writer.bool(data)
-    }
-
-}
-
-object ProtoInt : ProtoDecoder<Int>,ProtoEncoder<Int> {
-
-    override fun decodeFrom(record: ProtoRecord): Int =
-        record.int32()
-
-    override fun encodeInto(writer: ProtoBufferWriter, data: Int) {
-        writer.int32(data)
-    }
-
-}
-
-object ProtoString : ProtoDecoder<String>,ProtoEncoder<String> {
-
-    override fun decodeFrom(record: ProtoRecord): String =
-        record.string()
-
-    override fun encodeInto(writer: ProtoBufferWriter, data: String) {
-        writer.string(data)
-    }
-
-}
-
-class ProtoListEncoder<T>(
-    val itemEncoder : ProtoEncoder<T>
-) : ProtoEncoder<List<T>> {
-
-    override fun encodeInto(writer: ProtoBufferWriter, data: List<T>) {
-        val subWriter = ProtoBufferWriter()
-        for (item in data) {
-            itemEncoder.encodeInto(subWriter, item)
+    override fun encodeInto(writer: ProtoBufferWriter, value: List<T>) {
+        if (packed) {
+            val subWriter = ProtoBufferWriter()
+            for (item in value) {
+                encodeItemInto(subWriter, item)
+            }
+            writer.bytes(fieldNumber, subWriter.pack())
+        } else {
+            for (item in value) {
+                val subWriter = ProtoBufferWriter()
+                encodeItemInto(subWriter, item)
+                writer.bytes(fieldNumber, subWriter.pack())
+            }
         }
-        writer.bytes(subWriter.data)
-        // TODO performance enhancement of proto writer
-        // this moves data around way too much, the buffer list used by the writers
-        // and the sub-writers should be shared, something to do later
     }
 
-}
+    abstract fun decodeItemFrom(record: ProtoRecord): T
 
-
-class ProtoListDecoder<T>(
-    val itemDecoder : ProtoDecoder<T>
-) : ProtoDecoder<List<T>> {
-
-    override fun decodeFrom(record: ProtoRecord): List<T> {
-        check(record is LenProtoRecord)
+    override fun decodeFrom(records: List<ProtoRecord>): List<T> {
         val list = mutableListOf<T>()
-        for (itemRecord in ProtoBufferReader(record).records()) {
-            list += itemDecoder.decodeFrom(itemRecord)
+
+        for (record in records) {
+            if (record.fieldNumber != fieldNumber) continue
+
+            if (packed && record is LenProtoRecord) {
+                for (value in ProtoBufferReader(record).packedRecords(fieldNumber, packedType)) {
+                    list += decodeItemFrom(value)
+                }
+            } else {
+                list += decodeItemFrom(record)
+            }
         }
+
         return list
     }
+}
+
+class ProtoBooleanList(fieldNumber: Int) : ProtoList<Boolean>(fieldNumber, true) {
+
+    override fun encodeItemInto(writer: ProtoBufferWriter, value: Boolean) {
+        writer.bool(value)
+    }
+
+    override fun decodeItemFrom(record: ProtoRecord): Boolean =
+        record.bool()
+
+}
+
+class ProtoIntList(fieldNumber: Int) : ProtoList<Int>(fieldNumber, true) {
+
+    override fun encodeItemInto(writer: ProtoBufferWriter, value: Int) {
+        writer.int32(value)
+    }
+
+    override fun decodeItemFrom(record: ProtoRecord): Int =
+        record.int32()
+
+}
+
+class ProtoStringList(fieldNumber: Int) : ProtoList<String>(fieldNumber, true, LEN) {
+
+    override fun encodeItemInto(writer: ProtoBufferWriter, value: String) {
+        writer.string(value)
+    }
+
+    override fun decodeItemFrom(record: ProtoRecord): String =
+        record.string()
+
+}
+
+class ProtoListGen<T>(
+    fieldNumber: Int,
+    val decoder: ProtoDecoder<T>,
+    val encoder: ProtoEncoder<T>
+) : ProtoList<T>(fieldNumber) {
+
+    override fun encodeItemInto(writer: ProtoBufferWriter, value: T) {
+        encoder.encodeInto(writer, value)
+    }
+
+    override fun decodeItemFrom(record: ProtoRecord): T =
+        decoder.decodeFrom(record)
 
 }

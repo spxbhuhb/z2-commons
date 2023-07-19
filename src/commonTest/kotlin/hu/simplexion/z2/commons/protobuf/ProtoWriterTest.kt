@@ -9,7 +9,7 @@ class ProtoWriterTest {
     fun proto(builder: ProtoBufferWriter.() -> Unit): String {
         val writer = ProtoBufferWriter()
         writer.builder()
-        return writer.data.toHexString(0, writer.size)
+        return writer.pack().toHexString(0, writer.size)
     }
 
     val String.ns

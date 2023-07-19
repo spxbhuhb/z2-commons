@@ -2,15 +2,17 @@ package hu.simplexion.z2.commons.protobuf
 
 interface ProtoRecord {
 
-    val fieldNumber: Long
+    val fieldNumber: Int
     val type : Int
     val value : ULong
 
-    fun bool() = (value == 0UL)
+    fun bool() = (value != 0UL)
 
     fun int64(): Long = value.toLong()
 
-    fun int32(): Int {
+    fun int32(): Int = value.toInt()
+
+    fun sint32(): Int {
         return (value shr 1).toInt() xor - (value and 1UL).toInt()
     }
 
@@ -19,10 +21,12 @@ interface ProtoRecord {
     }
 
     fun string() : String = throw IllegalStateException("string is not available for numeric records")
+
+    fun bytes() : ByteArray = throw IllegalStateException("bytes is not available for numeric records")
 }
 
 class VarintProtoRecord(
-    override val fieldNumber: Long,
+    override val fieldNumber: Int,
     override val value : ULong
 ) : ProtoRecord {
 
@@ -32,7 +36,7 @@ class VarintProtoRecord(
 }
 
 class I64ProtoRecord(
-    override val fieldNumber: Long,
+    override val fieldNumber: Int,
     override val value : ULong
 ) : ProtoRecord {
     override val type: Int
@@ -40,7 +44,7 @@ class I64ProtoRecord(
 }
 
 class LenProtoRecord(
-    override val fieldNumber: Long,
+    override val fieldNumber: Int,
     val byteArray : ByteArray,
     val offset : Int,
     val length : Int
@@ -53,10 +57,13 @@ class LenProtoRecord(
 
     override fun string(): String =
         byteArray.decodeToString(offset, offset + length)
+
+    override fun bytes(): ByteArray =
+        byteArray.copyOfRange(offset, offset + length)
 }
 
 class I32ProtoRecord(
-    override val fieldNumber: Long,
+    override val fieldNumber: Int,
     override val value : ULong
 ) : ProtoRecord {
     override val type: Int
