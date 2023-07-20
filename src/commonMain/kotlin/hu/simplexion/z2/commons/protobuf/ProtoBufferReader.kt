@@ -22,8 +22,6 @@ class ProtoBufferReader(
 
     constructor(record: LenProtoRecord) : this(record.byteArray, record.offset, record.length)
 
-    fun message() : ProtoMessage = ProtoMessage(records())
-
     /**
      * Convert the byte array into a list of [ProtoRecord]. The records, [LenProtoRecord]s
      * in particular, are backed by the buffer, you should not modify the buffer while
