@@ -9,14 +9,17 @@ class ProtoReaderTest {
     val String.ns
         get() = replace(" ", "")
 
-    val String.int32
-        get() = ProtoBufferReader(this.ns.hexToByteArray()).records().first().int32()
+    val String.value
+        get() = ProtoMessage(this.ns.hexToByteArray()).get(2)!!.value
 
-    val String.int64
-        get() = ProtoBufferReader(this.ns.hexToByteArray()).records().first().int64()
+    val String.int32 : Int
+        get() = value.int32()
 
-    val String.sint64
-        get() = ProtoBufferReader(this.ns.hexToByteArray()).records().first().sint64()
+    val String.int64 : Long
+        get() = value.int64()
+
+    val String.sint64 : Long
+        get() = value.sint64()
 
     @Test
     fun int32() {

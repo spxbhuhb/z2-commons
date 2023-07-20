@@ -64,6 +64,10 @@ class ProtoBufferWriter(
         varint(((value shl 1) xor (value shr 31)).toULong())
     }
 
+    fun sint32(value: Int) {
+        varint(((value shl 1) xor (value shr 31)).toULong())
+    }
+
     fun uint32(fieldNumber: Int, value: UInt) {
         tag(fieldNumber, VARINT)
         varint(value.toULong())
@@ -86,6 +90,10 @@ class ProtoBufferWriter(
 
     fun sint64(fieldNumber: Int, value: Long) {
         tag(fieldNumber, VARINT)
+        varint(((value shl 1) xor (value shr 63)).toULong())
+    }
+
+    fun sint64(value: Long) {
         varint(((value shl 1) xor (value shr 63)).toULong())
     }
 

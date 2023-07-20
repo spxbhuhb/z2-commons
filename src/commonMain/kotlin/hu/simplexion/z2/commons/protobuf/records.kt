@@ -6,23 +6,16 @@ interface ProtoRecord {
     val type : Int
     val value : ULong
 
-    fun bool() = (value != 0UL)
-
-    fun int64(): Long = value.toLong()
-
-    fun int32(): Int = value.toInt()
-
-    fun sint32(): Int {
-        return (value shr 1).toInt() xor - (value and 1UL).toInt()
+    fun string(): String {
+        check(this is LenProtoRecord)
+        return byteArray.decodeToString(offset, offset + length)
     }
 
-    fun sint64(): Long {
-        return (value shr 1).toLong() xor - (value and 1UL).toLong()
+    fun bytes(): ByteArray {
+        check(this is LenProtoRecord)
+        return byteArray.copyOfRange(offset, offset + length)
     }
 
-    fun string() : String = throw IllegalStateException("string is not available for numeric records")
-
-    fun bytes() : ByteArray = throw IllegalStateException("bytes is not available for numeric records")
 }
 
 class VarintProtoRecord(
@@ -55,11 +48,7 @@ class LenProtoRecord(
     override val value: ULong
         get() = throw IllegalStateException("long value is not available for LEN record")
 
-    override fun string(): String =
-        byteArray.decodeToString(offset, offset + length)
-
-    override fun bytes(): ByteArray =
-        byteArray.copyOfRange(offset, offset + length)
+    fun message() = ProtoBufferReader(this).message()
 }
 
 class I32ProtoRecord(

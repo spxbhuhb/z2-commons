@@ -16,12 +16,18 @@ implementation("hu.simplexion.z2:z2-commons:2023.7.18-SNAPSHOT")
 
 ## Protobuf
 
-Low level functions for reading and writing [Protocol Buffer](https://protobuf.dev/) messages.
+Functions for [Protocol Buffer](https://protobuf.dev/) messages.
 
-| Type  | Name                                                                                                | Function                   | Platform |
-|-------|-----------------------------------------------------------------------------------------------------|----------------------------|----------|
-| class | [`ProtoBufferReader`](src/commonMain/kotlin/hu/simplexion/z2/commons/protobuf/ProtoBufferReader.kt) | Low level protobuf reader. | Common   |
-| class | [`ProtoBufferWriter`](src/commonMain/kotlin/hu/simplexion/z2/commons/protobuf/ProtoBufferWriter.kt) | Low level protobuf writer. | Common   |
+* focus on Kotlin data types
+* only proto version 3
+* not a full implementation
+
+| Type  | Name                                                                                                    | Function                   | Platform |
+|-------|---------------------------------------------------------------------------------------------------------|----------------------------|----------|
+| class | [`ProtoMessage`](src/commonMain/kotlin/hu/simplexion/z2/commons/protobuf/ProtoMessage.kt)               | Proto message for reading. | Common   |
+| class | [`ProtoMessageBuilder`](src/commonMain/kotlin/hu/simplexion/z2/commons/protobuf/ProtoMessageBuilder.kt) | Proto message builder.     | Common   |
+| class | [`ProtoBufferReader`](src/commonMain/kotlin/hu/simplexion/z2/commons/protobuf/ProtoBufferReader.kt)     | Low level protobuf reader. | Common   |
+| class | [`ProtoBufferWriter`](src/commonMain/kotlin/hu/simplexion/z2/commons/protobuf/ProtoBufferWriter.kt)     | Low level protobuf writer. | Common   |
 
 ## Utility Functions
 
