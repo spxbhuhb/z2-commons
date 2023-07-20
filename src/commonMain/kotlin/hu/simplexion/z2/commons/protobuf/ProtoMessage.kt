@@ -1,10 +1,18 @@
 package hu.simplexion.z2.commons.protobuf
 
+import hu.simplexion.z2.commons.util.UUID
+
+/**
+ * Parse Protocol Buffer messages.
+ *
+ * @param  wireFormat  The wire format message to parse. This buffer backs the parser, it should
+ *                     not change until the message is in use.
+ */
 class ProtoMessage(
-    val records: List<ProtoRecord>
+    wireFormat : ByteArray
 ) {
 
-    constructor(wireFormat : ByteArray) : this(ProtoBufferReader(wireFormat).records())
+    val records: List<ProtoRecord> = ProtoBufferReader(wireFormat).records()
 
     operator fun get(fieldNumber: Int): ProtoRecord? = records.lastOrNull { it.fieldNumber == fieldNumber }
 
@@ -47,6 +55,14 @@ class ProtoMessage(
     fun byteArray(fieldNumber: Int): ByteArray = get(fieldNumber)?.bytes() ?: ByteArray(0)
 
     fun byteArrayList(fieldNumber: Int) = scalarList(fieldNumber, { bytes() }, { bytes() })
+
+    // -----------------------------------------------------------------------------------------
+    // UUID
+    // -----------------------------------------------------------------------------------------
+
+    fun <T> uuid(fieldNumber: Int): UUID<T> = get(fieldNumber)?.uuid() ?: UUID.nil()
+
+    fun <T> uuidList(fieldNumber: Int) : List<UUID<T>> = scalarList(fieldNumber, { uuid() }, { uuid() })
 
     // -----------------------------------------------------------------------------------------
     // Non-Primitive

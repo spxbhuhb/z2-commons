@@ -1,5 +1,8 @@
 package hu.simplexion.z2.commons.protobuf
 
+import hu.simplexion.z2.commons.util.UUID
+import hu.simplexion.z2.commons.util.toUuid
+
 /**
  * A low level protobuf reader that decodes the protobuf wire
  * format into a list of protobuf records.
@@ -103,6 +106,14 @@ class ProtoBufferReader(
     fun string(): String {
         val length = varint().toInt()
         val value = buffer.decodeToString(readOffset, readOffset + length)
+        readOffset += length
+        return value
+    }
+
+    fun <T> uuid(): UUID<T> {
+        val length = varint().toInt()
+        check(length == 16)
+        val value = buffer.toUuid<T>(readOffset)
         readOffset += length
         return value
     }

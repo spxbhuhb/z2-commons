@@ -1,5 +1,13 @@
 package hu.simplexion.z2.commons.protobuf
 
+import hu.simplexion.z2.commons.util.UUID
+
+/**
+ * Build Protocol Buffer messages.
+ *
+ * Use the type-specific functions to add records and then use [pack] to get
+ * the wire format message.
+ */
 class ProtoMessageBuilder {
 
     val writer = ProtoBufferWriter()
@@ -91,6 +99,32 @@ class ProtoMessageBuilder {
         sub(fieldNumber) {
             for (value in values) {
                 it.bytes(value)
+            }
+        }
+        return this
+    }
+
+    // ----------------------------------------------------------------------------
+    // UUID
+    // ----------------------------------------------------------------------------
+
+    /**
+     * Add a UUID to the message. Uses `bytes` to store the 16 raw bytes of
+     * the UUID.
+     */
+    fun uuid(fieldNumber: Int, value: UUID<*>): ProtoMessageBuilder {
+        writer.bytes(fieldNumber, value.toByteArray())
+        return this
+    }
+
+    /**
+     * Add a list of UUIDs to the message. Uses packed `bytes` to store the
+     * 16 raw bytes of the UUID.
+     */
+    fun uuidList(fieldNumber: Int, values: List<UUID<*>>): ProtoMessageBuilder {
+        sub(fieldNumber) {
+            for (value in values) {
+                it.bytes(value.toByteArray())
             }
         }
         return this

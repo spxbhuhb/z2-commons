@@ -1,5 +1,6 @@
 package hu.simplexion.z2.commons.protobuf
 
+import hu.simplexion.z2.commons.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
@@ -20,6 +21,8 @@ class ProtoMessageTest {
         singlePrimitive("hello", { string(1, it) }) { string(1) }
 
         singlePrimitive("hello".encodeToByteArray(), { byteArray(1, it) }) { byteArray(1) }
+
+        singlePrimitive(UUID<Any>(), { uuid(1, it) }) { uuid(1) }
     }
 
     @Test
@@ -70,19 +73,28 @@ class ProtoMessageTest {
     }
 
     @Test
+    fun testUuidList() {
+        val expected = listOf<UUID<Any>>(UUID(), UUID(), UUID())
+        val wireFormat = ProtoMessageBuilder().uuidList(1, expected).pack()
+        val message = ProtoMessage(wireFormat)
+        val actual = message.uuidList<Any>(1)
+        assertContentEquals(expected, actual)
+    }
+
+    @Test
     fun testSimpleClass() =
-        instance(A, A) { A(true, 12, "hello", mutableListOf(4,5,6)) }
+        instance(A, A) { A(true, 12, "hello", mutableListOf(4, 5, 6)) }
 
     @Test
     fun testNestedClass() =
-        instance(B,B) { B(A(true, 123, "a", mutableListOf(4,5,6)), "b") }
+        instance(B, B) { B(A(true, 123, "a", mutableListOf(4, 5, 6)), "b") }
 
     @Test
     fun testListOfNestedClasses() {
         val expected = listOf(
-            B(A(true, 123, "a", mutableListOf(1,2,3)), "aa"),
-            B(A(false, 456, "b", mutableListOf(4,5,6)), "bb"),
-            B(A(true, 789, "c", mutableListOf(7,8,9)), "cc")
+            B(A(true, 123, "a", mutableListOf(1, 2, 3)), "aa"),
+            B(A(false, 456, "b", mutableListOf(4, 5, 6)), "bb"),
+            B(A(true, 789, "c", mutableListOf(7, 8, 9)), "cc")
         )
 
         val wireFormat = ProtoMessageBuilder().list(1, B, expected).pack()
@@ -110,7 +122,7 @@ class ProtoMessageTest {
         }
     }
 
-    fun <T> instance(encoder : ProtoEncoder<T>, decoder : ProtoDecoder<T>, builder : () -> T) {
+    fun <T> instance(encoder: ProtoEncoder<T>, decoder: ProtoDecoder<T>, builder: () -> T) {
         val expected = builder()
         val wireFormat = encoder.encodeProto(expected)
         val message = ProtoMessage(wireFormat)
@@ -122,9 +134,9 @@ class ProtoMessageTest {
         var b: Boolean = false,
         var i: Int = 0,
         var s: String = "",
-        var l : MutableList<Int> = mutableListOf()
+        var l: MutableList<Int> = mutableListOf()
     ) {
-        companion object: ProtoEncoder<A>, ProtoDecoder<A> {
+        companion object : ProtoEncoder<A>, ProtoDecoder<A> {
 
             override fun decodeProto(message: ProtoMessage?): A {
                 if (message == null) return A()
@@ -137,7 +149,7 @@ class ProtoMessageTest {
                 )
             }
 
-            override fun encodeProto(value: A) : ByteArray =
+            override fun encodeProto(value: A): ByteArray =
                 ProtoMessageBuilder()
                     .boolean(1, value.b)
                     .int(2, value.i)
@@ -163,7 +175,7 @@ class ProtoMessageTest {
                 )
             }
 
-            override fun encodeProto(value: B) : ByteArray =
+            override fun encodeProto(value: B): ByteArray =
                 ProtoMessageBuilder()
                     .instance(1, A, value.a)
                     .string(2, value.s)
