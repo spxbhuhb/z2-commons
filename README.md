@@ -14,6 +14,14 @@ Status: **experimental**
 implementation("hu.simplexion.z2:z2-commons:2023.7.18-SNAPSHOT")
 ```
 
+## Packages
+
+| Name                       | Function                                  |
+|----------------------------|-------------------------------------------|
+| [i18n](#i18n)              | Internationalization primitives.          |
+| [protobuf](#protobuf)      | Build and parse Protocol Buffer messages. |
+| [util](#utility-functions) | Miscellenaous utility functions.          |
+
 ## Protobuf
 
 Functions for [Protocol Buffer](https://protobuf.dev/) messages.

@@ -102,7 +102,7 @@ class ProtoMessageBuilder {
 
     fun <T> list(fieldNumber: Int, encoder: ProtoEncoder<T>, values: List<T>): ProtoMessageBuilder {
         for (value in values) {
-            writer.bytes(fieldNumber, encoder.encode(value))
+            writer.bytes(fieldNumber, encoder.encodeProto(value))
         }
         return this
     }
@@ -112,7 +112,7 @@ class ProtoMessageBuilder {
     // ----------------------------------------------------------------------------
 
     fun <T> instance(fieldNumber: Int, encoder: ProtoEncoder<T>, value: T): ProtoMessageBuilder {
-        writer.bytes(fieldNumber, encoder.encode(value))
+        writer.bytes(fieldNumber, encoder.encodeProto(value))
         return this
     }
 

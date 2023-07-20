@@ -53,9 +53,9 @@ class ProtoMessage(
     // -----------------------------------------------------------------------------------------
 
     fun <T> instance(fieldNumber: Int, decoder: ProtoDecoder<T>) : T {
-        val record = get(fieldNumber) ?: return decoder.decode(null)
+        val record = get(fieldNumber) ?: return decoder.decodeProto(null)
         check(record is LenProtoRecord)
-        return decoder.decode(record.message())
+        return decoder.decodeProto(record.message())
     }
 
     // -----------------------------------------------------------------------------------------
@@ -67,7 +67,7 @@ class ProtoMessage(
         for (record in records) {
             if (record.fieldNumber != fieldNumber) continue
             check(record is LenProtoRecord)
-            list += decoder.decode(record.message())
+            list += decoder.decodeProto(record.message())
         }
         return list
     }

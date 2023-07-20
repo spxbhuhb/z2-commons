@@ -112,9 +112,9 @@ class ProtoMessageTest {
 
     fun <T> instance(encoder : ProtoEncoder<T>, decoder : ProtoDecoder<T>, builder : () -> T) {
         val expected = builder()
-        val wireFormat = encoder.encode(expected)
+        val wireFormat = encoder.encodeProto(expected)
         val message = ProtoMessage(wireFormat)
-        val actual = decoder.decode(message)
+        val actual = decoder.decodeProto(message)
         assertEquals(expected, actual)
     }
 
@@ -126,7 +126,7 @@ class ProtoMessageTest {
     ) {
         companion object: ProtoEncoder<A>, ProtoDecoder<A> {
 
-            override fun decode(message: ProtoMessage?): A {
+            override fun decodeProto(message: ProtoMessage?): A {
                 if (message == null) return A()
 
                 return A(
@@ -137,7 +137,7 @@ class ProtoMessageTest {
                 )
             }
 
-            override fun encode(value: A) : ByteArray =
+            override fun encodeProto(value: A) : ByteArray =
                 ProtoMessageBuilder()
                     .boolean(1, value.b)
                     .int(2, value.i)
@@ -154,7 +154,7 @@ class ProtoMessageTest {
     ) {
         companion object : ProtoEncoder<B>, ProtoDecoder<B> {
 
-            override fun decode(message: ProtoMessage?): B {
+            override fun decodeProto(message: ProtoMessage?): B {
                 if (message == null) return B()
 
                 return B(
@@ -163,7 +163,7 @@ class ProtoMessageTest {
                 )
             }
 
-            override fun encode(value: B) : ByteArray =
+            override fun encodeProto(value: B) : ByteArray =
                 ProtoMessageBuilder()
                     .instance(1, A, value.a)
                     .string(2, value.s)
