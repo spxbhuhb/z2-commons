@@ -10,7 +10,7 @@ class ProtoReaderTest {
         get() = replace(" ", "")
 
     val String.value
-        get() = ProtoMessage(this.ns.hexToByteArray()).get(2)!!.value
+        get() = ProtoMessage(this.ns.hexToByteArray())[2] !!.value
 
     val String.int32 : Int
         get() = value.int32()
@@ -27,9 +27,10 @@ class ProtoReaderTest {
         assertEquals(1,"10 01".int32)
         assertEquals(150, "10 96 01".int32)
         assertEquals(18789, "10 e5 92 01".int32)
-        assertEquals(Int.MAX_VALUE, "10 ff ff ff ff 0f".int32)
-        assertEquals(-1, "10 ff ff ff ff 01".int32)
-        assertEquals(-2, "10 fe ff ff ff 01".int32)
+        assertEquals(Int.MAX_VALUE, "10 ff ff ff ff 07".int32)
+        assertEquals(Int.MIN_VALUE, "10 80 80 80 80 f8 ff ff ff ff 01".int32)
+        assertEquals(-1, "10 ff ff ff ff ff ff ff ff ff 01".int32)
+        assertEquals(-2, "10 fe ff ff ff ff ff ff ff ff 01".int32)
     }
 
     @Test

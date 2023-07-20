@@ -56,7 +56,7 @@ class LenProtoRecord(
     override val value: ULong
         get() = throw IllegalStateException("long value is not available for LEN record")
 
-    fun message() = ProtoBufferReader(this).message()
+    fun message() = ProtoMessage(byteArray, offset, length)
 }
 
 class I32ProtoRecord(

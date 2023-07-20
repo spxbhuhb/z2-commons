@@ -9,10 +9,12 @@ import hu.simplexion.z2.commons.util.UUID
  *                     not change until the message is in use.
  */
 class ProtoMessage(
-    wireFormat : ByteArray
+    wireFormat : ByteArray,
+    offset : Int = 0,
+    length : Int = wireFormat.size
 ) {
 
-    val records: List<ProtoRecord> = ProtoBufferReader(wireFormat).records()
+    val records: List<ProtoRecord> = ProtoBufferReader(wireFormat, offset, length).records()
 
     operator fun get(fieldNumber: Int): ProtoRecord? = records.lastOrNull { it.fieldNumber == fieldNumber }
 
