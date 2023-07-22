@@ -97,9 +97,9 @@ class ProtoMessageTest {
             B(A(true, 789, "c", mutableListOf(7, 8, 9)), "cc")
         )
 
-        val wireFormat = ProtoMessageBuilder().list(1, B, expected).pack()
+        val wireFormat = ProtoMessageBuilder().instanceList(1, B, expected).pack()
         val message = ProtoMessage(wireFormat)
-        val actual = message.list(1, B)
+        val actual = message.instanceList(1, B)
         assertContentEquals(expected, actual)
     }
 
@@ -129,58 +129,4 @@ class ProtoMessageTest {
         val actual = decoder.decodeProto(message)
         assertEquals(expected, actual)
     }
-
-    data class A(
-        var b: Boolean = false,
-        var i: Int = 0,
-        var s: String = "",
-        var l: MutableList<Int> = mutableListOf()
-    ) {
-        companion object : ProtoEncoder<A>, ProtoDecoder<A> {
-
-            override fun decodeProto(message: ProtoMessage?): A {
-                if (message == null) return A()
-
-                return A(
-                    message.boolean(1),
-                    message.int(2),
-                    message.string(3),
-                    message.intList(4)
-                )
-            }
-
-            override fun encodeProto(value: A): ByteArray =
-                ProtoMessageBuilder()
-                    .boolean(1, value.b)
-                    .int(2, value.i)
-                    .string(3, value.s)
-                    .intList(4, value.l)
-                    .pack()
-        }
-    }
-
-
-    data class B(
-        var a: A = A(),
-        var s: String = ""
-    ) {
-        companion object : ProtoEncoder<B>, ProtoDecoder<B> {
-
-            override fun decodeProto(message: ProtoMessage?): B {
-                if (message == null) return B()
-
-                return B(
-                    message.instance(1, A),
-                    message.string(2)
-                )
-            }
-
-            override fun encodeProto(value: B): ByteArray =
-                ProtoMessageBuilder()
-                    .instance(1, A, value.a)
-                    .string(2, value.s)
-                    .pack()
-        }
-    }
-
 }

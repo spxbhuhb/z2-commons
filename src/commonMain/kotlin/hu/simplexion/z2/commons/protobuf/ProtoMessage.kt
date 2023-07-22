@@ -80,7 +80,7 @@ class ProtoMessage(
     // Non-Scalar List
     // -----------------------------------------------------------------------------------------
 
-    fun <T> list(fieldNumber: Int, decoder: ProtoDecoder<T>): MutableList<T> {
+    fun <T> instanceList(fieldNumber: Int, decoder: ProtoDecoder<T>): MutableList<T> {
         val list = mutableListOf<T>()
         for (record in records) {
             if (record.fieldNumber != fieldNumber) continue

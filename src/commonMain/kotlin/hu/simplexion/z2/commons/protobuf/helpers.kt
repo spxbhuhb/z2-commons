@@ -41,3 +41,38 @@ object ProtoOneUuid : ProtoDecoder<UUID<Any>> {
     override fun decodeProto(message: ProtoMessage?): UUID<Any> =
         message?.uuid(1) ?: UUID()
 }
+
+object ProtoOneBooleanList : ProtoDecoder<List<Boolean>> {
+    override fun decodeProto(message: ProtoMessage?): List<Boolean> =
+        message?.booleanList(1) ?: emptyList()
+}
+
+object ProtoOneIntList : ProtoDecoder<List<Int>> {
+    override fun decodeProto(message: ProtoMessage?): List<Int> =
+        message?.intList(1) ?: emptyList()
+}
+
+object ProtoOneLongList : ProtoDecoder<List<Long>> {
+    override fun decodeProto(message: ProtoMessage?): List<Long> =
+        message?.longList(1) ?: emptyList()
+}
+
+object ProtoOneStringList : ProtoDecoder<List<String>> {
+    override fun decodeProto(message: ProtoMessage?): List<String> =
+        message?.stringList(1) ?: emptyList()
+}
+
+object ProtoOneByteArrayList : ProtoDecoder<List<ByteArray>> {
+    override fun decodeProto(message: ProtoMessage?): List<ByteArray> =
+        message?.byteArrayList(1) ?: emptyList()
+}
+
+object ProtoOneUuidList : ProtoDecoder<List<UUID<Any>>> {
+    override fun decodeProto(message: ProtoMessage?): List<UUID<Any>> =
+        message?.uuidList(1) ?: emptyList()
+}
+
+class ProtoOneInstanceList<T>(val decoder : ProtoDecoder<T>) : ProtoDecoder<List<T>> {
+    override fun decodeProto(message: ProtoMessage?): List<T> =
+        message?.instanceList(1, decoder) ?: emptyList()
+}

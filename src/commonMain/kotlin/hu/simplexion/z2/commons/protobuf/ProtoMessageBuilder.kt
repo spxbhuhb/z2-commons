@@ -134,7 +134,7 @@ class ProtoMessageBuilder {
     // Non-Scalar List
     // ----------------------------------------------------------------------------
 
-    fun <T> list(fieldNumber: Int, encoder: ProtoEncoder<T>, values: List<T>): ProtoMessageBuilder {
+    fun <T> instanceList(fieldNumber: Int, encoder: ProtoEncoder<T>, values: List<T>): ProtoMessageBuilder {
         for (value in values) {
             writer.bytes(fieldNumber, encoder.encodeProto(value))
         }
