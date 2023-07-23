@@ -108,8 +108,6 @@ class ProtoMessageTest {
     // ----------------------------------------------------------------------
 
     fun <T> singlePrimitive(expected: T, write: ProtoMessageBuilder.(value: T) -> Unit, read: ProtoMessage.() -> T) {
-
-
         val wireFormat = ProtoMessageBuilder().apply { write(expected) }.pack()
         val message = ProtoMessage(wireFormat)
 
