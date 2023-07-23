@@ -64,7 +64,7 @@ class ProtoBuiltinTest {
 
         val wireformat = builder.pack()
         val message = ProtoMessage(wireformat)
-        println(wireformat.protoDump())
+        println(wireformat.dumpProto())
 
         fieldNumber = 1
 
@@ -111,6 +111,7 @@ class ProtoBuiltinTest {
         assertEquals(stringVal, ProtoOneString.decode { string(1, stringVal) })
         assertContentEquals(byteArrayVal, ProtoOneByteArray.decode { byteArray(1, byteArrayVal) })
         assertEquals(uuidVal, ProtoOneUuid.decode { uuid(1, uuidVal) })
+        assertEquals(instanceVal, ProtoOneInstance<A>(A).decode { instance(1, A, instanceVal) })
 
         assertContentEquals(booleanListVal, ProtoOneBooleanList.decode { booleanList(1, booleanListVal) })
         assertContentEquals(intListVal, ProtoOneIntList.decode { intList(1, intListVal) })

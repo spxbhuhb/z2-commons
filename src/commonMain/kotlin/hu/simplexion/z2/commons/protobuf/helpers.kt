@@ -42,6 +42,11 @@ object ProtoOneUuid : ProtoDecoder<UUID<Any>> {
         message?.uuid(1) ?: UUID()
 }
 
+class ProtoOneInstance<T>(val decoder : ProtoDecoder<T>) : ProtoDecoder<T> {
+    override fun decodeProto(message: ProtoMessage?): T =
+        checkNotNull(message?.instance(1, decoder)) { "cannot decode instance with $decoder" }
+}
+
 object ProtoOneBooleanList : ProtoDecoder<List<Boolean>> {
     override fun decodeProto(message: ProtoMessage?): List<Boolean> =
         message?.booleanList(1) ?: emptyList()

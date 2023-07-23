@@ -11,7 +11,7 @@ class DumpTest {
             .string(2, "Hello")
             .instance(3, A, A(false, 123, "World", mutableListOf(12)))
             .pack()
-            .protoDump()
+            .dumpProto()
 
         println(dump)
     }
