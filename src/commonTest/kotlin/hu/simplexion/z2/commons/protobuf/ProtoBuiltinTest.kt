@@ -23,9 +23,9 @@ class ProtoBuiltinTest {
     val uuidListVal = listOf(UUID<Any>(), UUID(), UUID())
 
     val instanceListVal = listOf(
-        B(A(true, 123, "a", mutableListOf(1, 2, 3)), "aa"),
-        B(A(false, 456, "b", mutableListOf(4, 5, 6)), "bb"),
-        B(A(true, 789, "c", mutableListOf(7, 8, 9)), "cc")
+        B(A(true, 123, "a", mutableListOf(1, 2, 3)), "AA"),
+        B(A(false, 456, "b", mutableListOf(4, 5, 6)), "BB"),
+        B(A(true, 789, "c", mutableListOf(7, 8, 9)), "CC")
     )
 
     @Test
@@ -40,15 +40,31 @@ class ProtoBuiltinTest {
             .byteArray(fieldNumber++, byteArrayVal)
             .uuid(fieldNumber++, uuidVal)
             .instance(fieldNumber++, A, instanceVal)
+
+            .booleanList(fieldNumber++, emptyList())
             .booleanList(fieldNumber++, booleanListVal)
+
+            .intList(fieldNumber++, emptyList())
             .intList(fieldNumber++, intListVal)
+
+            .longList(fieldNumber++, emptyList())
             .longList(fieldNumber++, longListVal)
+
+            .stringList(fieldNumber++, emptyList())
             .stringList(fieldNumber++, stringListVal)
+
+            .byteArrayList(fieldNumber++, emptyList())
             .byteArrayList(fieldNumber++, byteArrayListVal)
+
+            .uuidList(fieldNumber++, emptyList())
             .uuidList(fieldNumber++, uuidListVal)
+
+            .instanceList(fieldNumber++, B, emptyList())
             .instanceList(fieldNumber, B, instanceListVal)
 
-        val message = ProtoMessage(builder.pack())
+        val wireformat = builder.pack()
+        val message = ProtoMessage(wireformat)
+        println(wireformat.protoDump())
 
         fieldNumber = 1
 
@@ -60,14 +76,27 @@ class ProtoBuiltinTest {
         assertEquals(uuidVal, message.uuid(fieldNumber++))
         assertEquals(instanceVal, message.instance(fieldNumber++, A))
 
+        assertContentEquals(emptyList(), message.booleanList(fieldNumber++))
         assertContentEquals(booleanListVal, message.booleanList(fieldNumber++))
+
+        assertContentEquals(emptyList(), message.intList(fieldNumber++))
         assertContentEquals(intListVal, message.intList(fieldNumber++))
+
+        assertContentEquals(emptyList(), message.longList(fieldNumber++))
         assertContentEquals(longListVal, message.longList(fieldNumber++))
+
+        assertContentEquals(emptyList(), message.stringList(fieldNumber++))
         assertContentEquals(stringListVal, message.stringList(fieldNumber++))
+
+        assertContentEquals(emptyList(), message.byteArrayList(fieldNumber++))
         message.byteArrayList(fieldNumber++).forEachIndexed { index, bytes ->
             assertContentEquals(byteArrayListVal[index], bytes)
         }
+
+        assertContentEquals(emptyList<UUID<Any>>(), message.uuidList(fieldNumber++))
         assertContentEquals(uuidListVal, message.uuidList(fieldNumber++))
+
+        assertContentEquals(emptyList(), message.instanceList(fieldNumber++, B))
         assertContentEquals(instanceListVal, message.instanceList(fieldNumber, B))
     }
 

@@ -238,20 +238,18 @@ class ProtoBufferWriter(
     private fun put(byteArray: ByteArray) {
         varint(byteArray.size.toULong())
 
-        var availableSpace = buffer.size - writeOffset
+        val availableSpace = buffer.size - writeOffset
         var copyOffset = 0
-        var remaining = byteArray.size
+        val length = byteArray.size
 
-        if (remaining > availableSpace) {
+        if (length > availableSpace) {
             byteArray.copyInto(buffer, writeOffset, 0, availableSpace)
             copyOffset = availableSpace
-            remaining -= availableSpace
-            availableSpace = max(additionalBufferSize, remaining)
-            addBuffer(availableSpace)
+            addBuffer(max(additionalBufferSize, length - availableSpace))
         }
 
-        byteArray.copyInto(buffer, writeOffset, copyOffset, remaining)
-        writeOffset += remaining
+        byteArray.copyInto(buffer, writeOffset, copyOffset, length)
+        writeOffset += length - copyOffset
     }
 
     /**
