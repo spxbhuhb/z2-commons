@@ -6,13 +6,24 @@
 
 Common utility functions for Kotlin Multiplatform programming. Part of [Z2](https://github.com/spxbhuhb/z2).
 
+**NOTE** The library is under active development, the non-snapshot release on Maven Central is probably lagging behind. 
+This documentation covers the latest SNAPSHOT release.
+
 Status: **experimental**
 
 ## Dependency
 
 ```kotlin
-implementation("hu.simplexion.z2:z2-commons:2023.7.18-SNAPSHOT")
+implementation("hu.simplexion.z2:z2-commons:2023.7.20-SNAPSHOT")
 ```
+
+## Packages
+
+| Name                  | Function                                  |
+|-----------------------|-------------------------------------------|
+| [i18n](#i18n)         | Internationalization primitives.          |
+| [protobuf](#protobuf) | Build and parse Protocol Buffer messages. |
+| [util](#utility)      | Miscellenaous utility functions.          |
 
 ## Protobuf
 
@@ -22,21 +33,23 @@ Functions for [Protocol Buffer](https://protobuf.dev/) messages.
 * only proto version 3
 * not a full implementation
 
-| Type  | Name                                                                                                    | Function                   | Platform |
-|-------|---------------------------------------------------------------------------------------------------------|----------------------------|----------|
-| class | [`ProtoMessage`](src/commonMain/kotlin/hu/simplexion/z2/commons/protobuf/ProtoMessage.kt)               | Proto message for reading. | Common   |
-| class | [`ProtoMessageBuilder`](src/commonMain/kotlin/hu/simplexion/z2/commons/protobuf/ProtoMessageBuilder.kt) | Proto message builder.     | Common   |
-| class | [`ProtoBufferReader`](src/commonMain/kotlin/hu/simplexion/z2/commons/protobuf/ProtoBufferReader.kt)     | Low level protobuf reader. | Common   |
-| class | [`ProtoBufferWriter`](src/commonMain/kotlin/hu/simplexion/z2/commons/protobuf/ProtoBufferWriter.kt)     | Low level protobuf writer. | Common   |
+| Type  | Name                                                                                                    | Function           | Platform |
+|-------|---------------------------------------------------------------------------------------------------------|--------------------|----------|
+| class | [`ProtoMessage`](src/commonMain/kotlin/hu/simplexion/z2/commons/protobuf/ProtoMessage.kt)               | Parse wire format. | Common   |
+| class | [`ProtoMessageBuilder`](src/commonMain/kotlin/hu/simplexion/z2/commons/protobuf/ProtoMessageBuilder.kt) | Build wire format. | Common   |
 
-## Utility Functions
+## Utility
 
-| Type  | Name                                                                               | Function                                                              | Platform |
-|-------|------------------------------------------------------------------------------------|-----------------------------------------------------------------------|----------|
-| fun   | [`fourRandomInt`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/random.kt)   | Get 4 random Int values.                                              | Js, JVM  |
-| fun   | [`vmNowMicro`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/clock.kt)       | Virtual machine time in microseconds.                                 | Js, JVM  |
-| class | [`UUID`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/uuid.kt)              | Type bound UUID 4 implementation                                      | Js, JVM  |
-| fun   | [`localLaunch`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/coroutines.kt) | Create a scope with `Dispatchers.Default` and launch the block in it. | Common   |
+| Type  | Name                                                                                | Function                                                              | Platform |
+|-------|-------------------------------------------------------------------------------------|-----------------------------------------------------------------------|----------|
+| fun   | [`ByteArray.toUuid`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/uuid.kt)   | Convert bytes to UUID.                                                | Common   |
+| fun   | [`ByteArray.toLong`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/uuid.kt)   | Convert bytes to Long.                                                | Common   |
+| fun   | [`fourRandomInt`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/random.kt)    | Get 4 random Int values.                                              | Js, JVM  |
+| fun   | [`localLaunch`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/coroutines.kt)  | Create a scope with `Dispatchers.Default` and launch the block in it. | Common   |
+| fun   | [`Long.toByteArray`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/number.kt) | Get a ByteArray that contains the long.                               | Common   |
+| fun   | [`Long.encodeInto`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/number.kt)  | Encode a Long into a ByteArray at a given offset.                     | Common   |
+| class | [`UUID`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/uuid.kt)               | Type bound UUID 4 implementation                                      | Js, JVM  |
+| fun   | [`vmNowMicro`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/clock.kt)        | Virtual machine time in microseconds.                                 | Js, JVM  |
 
 ## I18N
 

@@ -1,10 +1,20 @@
 package hu.simplexion.z2.commons.protobuf
 
+import hu.simplexion.z2.commons.util.UUID
+
+/**
+ * Parse Protocol Buffer messages.
+ *
+ * @param  wireFormat  The wire format message to parse. This buffer backs the parser, it should
+ *                     not change until the message is in use.
+ */
 class ProtoMessage(
-    val records: List<ProtoRecord>
+    wireFormat : ByteArray,
+    offset : Int = 0,
+    length : Int = wireFormat.size
 ) {
 
-    constructor(wireFormat : ByteArray) : this(ProtoBufferReader(wireFormat).records())
+    val records: List<ProtoRecord> = ProtoBufferReader(wireFormat, offset, length).records()
 
     operator fun get(fieldNumber: Int): ProtoRecord? = records.lastOrNull { it.fieldNumber == fieldNumber }
 
@@ -49,25 +59,33 @@ class ProtoMessage(
     fun byteArrayList(fieldNumber: Int) = scalarList(fieldNumber, { bytes() }, { bytes() })
 
     // -----------------------------------------------------------------------------------------
+    // UUID
+    // -----------------------------------------------------------------------------------------
+
+    fun <T> uuid(fieldNumber: Int): UUID<T> = get(fieldNumber)?.uuid() ?: UUID.nil()
+
+    fun <T> uuidList(fieldNumber: Int) : List<UUID<T>> = scalarList(fieldNumber, { uuid() }, { uuid() })
+
+    // -----------------------------------------------------------------------------------------
     // Non-Primitive
     // -----------------------------------------------------------------------------------------
 
     fun <T> instance(fieldNumber: Int, decoder: ProtoDecoder<T>) : T {
-        val record = get(fieldNumber) ?: return decoder.decode(null)
+        val record = get(fieldNumber) ?: return decoder.decodeProto(null)
         check(record is LenProtoRecord)
-        return decoder.decode(record.message())
+        return decoder.decodeProto(record.message())
     }
 
     // -----------------------------------------------------------------------------------------
     // Non-Scalar List
     // -----------------------------------------------------------------------------------------
 
-    fun <T> list(fieldNumber: Int, decoder: ProtoDecoder<T>): MutableList<T> {
+    fun <T> instanceList(fieldNumber: Int, decoder: ProtoDecoder<T>): MutableList<T> {
         val list = mutableListOf<T>()
         for (record in records) {
             if (record.fieldNumber != fieldNumber) continue
             check(record is LenProtoRecord)
-            list += decoder.decode(record.message())
+            list += decoder.decodeProto(record.message())
         }
         return list
     }

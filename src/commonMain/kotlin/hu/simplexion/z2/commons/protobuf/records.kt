@@ -1,5 +1,8 @@
 package hu.simplexion.z2.commons.protobuf
 
+import hu.simplexion.z2.commons.util.UUID
+import hu.simplexion.z2.commons.util.toUuid
+
 interface ProtoRecord {
 
     val fieldNumber: Int
@@ -9,6 +12,11 @@ interface ProtoRecord {
     fun string(): String {
         check(this is LenProtoRecord)
         return byteArray.decodeToString(offset, offset + length)
+    }
+
+    fun <T> uuid(): UUID<T> {
+        check(this is LenProtoRecord)
+        return byteArray.toUuid(offset)
     }
 
     fun bytes(): ByteArray {
@@ -48,7 +56,7 @@ class LenProtoRecord(
     override val value: ULong
         get() = throw IllegalStateException("long value is not available for LEN record")
 
-    fun message() = ProtoBufferReader(this).message()
+    fun message() = ProtoMessage(byteArray, offset, length)
 }
 
 class I32ProtoRecord(

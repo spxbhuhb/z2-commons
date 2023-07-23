@@ -1,5 +1,13 @@
 package hu.simplexion.z2.commons.protobuf
 
+import hu.simplexion.z2.commons.util.UUID
+
+/**
+ * Build Protocol Buffer messages.
+ *
+ * Use the type-specific functions to add records and then use [pack] to get
+ * the wire format message.
+ */
 class ProtoMessageBuilder {
 
     val writer = ProtoBufferWriter()
@@ -97,12 +105,38 @@ class ProtoMessageBuilder {
     }
 
     // ----------------------------------------------------------------------------
+    // UUID
+    // ----------------------------------------------------------------------------
+
+    /**
+     * Add a UUID to the message. Uses `bytes` to store the 16 raw bytes of
+     * the UUID.
+     */
+    fun uuid(fieldNumber: Int, value: UUID<*>): ProtoMessageBuilder {
+        writer.bytes(fieldNumber, value.toByteArray())
+        return this
+    }
+
+    /**
+     * Add a list of UUIDs to the message. Uses packed `bytes` to store the
+     * 16 raw bytes of the UUID.
+     */
+    fun uuidList(fieldNumber: Int, values: List<UUID<*>>): ProtoMessageBuilder {
+        sub(fieldNumber) {
+            for (value in values) {
+                it.bytes(value.toByteArray())
+            }
+        }
+        return this
+    }
+
+    // ----------------------------------------------------------------------------
     // Non-Scalar List
     // ----------------------------------------------------------------------------
 
-    fun <T> list(fieldNumber: Int, encoder: ProtoEncoder<T>, values: List<T>): ProtoMessageBuilder {
+    fun <T> instanceList(fieldNumber: Int, encoder: ProtoEncoder<T>, values: List<T>): ProtoMessageBuilder {
         for (value in values) {
-            writer.bytes(fieldNumber, encoder.encode(value))
+            writer.bytes(fieldNumber, encoder.encodeProto(value))
         }
         return this
     }
@@ -112,7 +146,7 @@ class ProtoMessageBuilder {
     // ----------------------------------------------------------------------------
 
     fun <T> instance(fieldNumber: Int, encoder: ProtoEncoder<T>, value: T): ProtoMessageBuilder {
-        writer.bytes(fieldNumber, encoder.encode(value))
+        writer.bytes(fieldNumber, encoder.encodeProto(value))
         return this
     }
 

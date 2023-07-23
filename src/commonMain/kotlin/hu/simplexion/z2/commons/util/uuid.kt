@@ -3,19 +3,15 @@
  */
 package hu.simplexion.z2.commons.util
 
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
-
 const val versionMask = 0xffff0fff.toInt()
 const val version = 0x00004000
 const val variantMask = 0x3fffffff
 const val variant = 0x80000000.toInt()
 
 val hexChars = arrayOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f')
+
+fun <T> ByteArray.toUuid(offset : Int = 0) : UUID<T> =
+    UUID(toLong(offset), toLong(offset + 8))
 
 /**
  * Strongly typed UUID class. Strong typing of this class was a decision to improve
@@ -28,13 +24,13 @@ val hexChars = arrayOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b
  * 2. use `Interim` type for UUDSs that exists for a short time
  * 3. create an object that represents the entity type you want to use
  */
-@Serializable(with = UUIDStringSerializer::class)
 class UUID<T> : Comparable<UUID<T>> {
 
     companion object {
-        @PublicApi
-        val NIL = UUID<Any>(IntArray(4) { 0 }, 0)
         val mask = 0xffffffff.toULong()
+        val NIL = UUID<Any>(IntArray(4) { 0 }, 0)
+        @Suppress("UNCHECKED_CAST")
+        fun <T> nil() = NIL as UUID<T>
     }
 
     val msbm: Int
@@ -122,11 +118,17 @@ class UUID<T> : Comparable<UUID<T>> {
     }
 
     @PublicApi
-    fun toShort() : String {
+    fun toShort(): String {
         val chars = CharArray(6)
         digits(msbm shr 8, chars, 0, 6)
         return chars.concatToString()
     }
+
+    fun toByteArray(): ByteArray =
+        ByteArray(16).also {
+            msb.encodeInto(it, 0)
+            lsb.encodeInto(it, 8)
+        }
 
     private fun digits(value: Int, chars: CharArray, position: Int, digits: Int) {
         var i = position + digits
@@ -150,12 +152,4 @@ class UUID<T> : Comparable<UUID<T>> {
 
         return lsbl.compareTo(other.lsbl)
     }
-}
-
-object UUIDStringSerializer : KSerializer<UUID<Any>> {
-    override val descriptor = PrimitiveSerialDescriptor("UUID", PrimitiveKind.STRING)
-
-    override fun deserialize(decoder: Decoder) = UUID<Any>(decoder.decodeString())
-
-    override fun serialize(encoder: Encoder, value: UUID<Any>) = encoder.encodeString(value.toString())
 }

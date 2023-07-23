@@ -4,6 +4,7 @@
 package util
 
 import hu.simplexion.z2.commons.util.UUID
+import hu.simplexion.z2.commons.util.toUuid
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -54,5 +55,14 @@ class UuidTest {
         val ju = java.util.UUID(cu.msb, cu.lsb)
 
         assertEquals(ju.toString(), cu.toString())
+    }
+
+    @Test
+    fun toAndFromByteArray() {
+        for (i in 0 .. 100) {
+            val expected = UUID<Any>()
+            println(expected)
+            assertEquals(expected, expected.toByteArray().toUuid())
+        }
     }
 }
