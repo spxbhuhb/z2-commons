@@ -12,6 +12,10 @@ fun ULong.sint32(): Int = (this shr 1).toInt() xor -(this and 1UL).toInt()
 
 fun ULong.sint64(): Long = (this shr 1).toLong() xor -(this and 1UL).toLong()
 
+object ProtoOneUnit : ProtoDecoder<Unit> {
+    override fun decodeProto(message: ProtoMessage?) {}
+}
+
 object ProtoOneBoolean : ProtoDecoder<Boolean> {
     override fun decodeProto(message: ProtoMessage?): Boolean =
         message?.boolean(1) ?: false
@@ -42,7 +46,7 @@ object ProtoOneUuid : ProtoDecoder<UUID<Any>> {
         message?.uuid(1) ?: UUID()
 }
 
-class ProtoOneInstance<T>(val decoder : ProtoDecoder<T>) : ProtoDecoder<T> {
+class ProtoOneInstance<T>(val decoder: ProtoDecoder<T>) : ProtoDecoder<T> {
     override fun decodeProto(message: ProtoMessage?): T =
         checkNotNull(message?.instance(1, decoder)) { "cannot decode instance with $decoder" }
 }
@@ -77,7 +81,7 @@ object ProtoOneUuidList : ProtoDecoder<List<UUID<Any>>> {
         message?.uuidList(1) ?: emptyList()
 }
 
-class ProtoOneInstanceList<T>(val decoder : ProtoDecoder<T>) : ProtoDecoder<List<T>> {
+class ProtoOneInstanceList<T>(val decoder: ProtoDecoder<T>) : ProtoDecoder<List<T>> {
     override fun decodeProto(message: ProtoMessage?): List<T> =
         message?.instanceList(1, decoder) ?: emptyList()
 }

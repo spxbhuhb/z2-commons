@@ -105,13 +105,14 @@ class ProtoBuiltinTest {
 
     @Test
     fun oneTest() {
+        assertEquals(Unit, ProtoOneUnit.decode {  })
         assertEquals(booleanVal, ProtoOneBoolean.decode { boolean(1, booleanVal) })
         assertEquals(intVal, ProtoOneInt.decode { int(1, intVal) })
         assertEquals(longVal, ProtoOneLong.decode { long(1, longVal) })
         assertEquals(stringVal, ProtoOneString.decode { string(1, stringVal) })
         assertContentEquals(byteArrayVal, ProtoOneByteArray.decode { byteArray(1, byteArrayVal) })
         assertEquals(uuidVal, ProtoOneUuid.decode { uuid(1, uuidVal) })
-        assertEquals(instanceVal, ProtoOneInstance<A>(A).decode { instance(1, A, instanceVal) })
+        assertEquals(instanceVal, ProtoOneInstance(A).decode { instance(1, A, instanceVal) })
 
         assertContentEquals(booleanListVal, ProtoOneBooleanList.decode { booleanList(1, booleanListVal) })
         assertContentEquals(intListVal, ProtoOneIntList.decode { intList(1, intListVal) })
