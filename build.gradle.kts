@@ -3,7 +3,6 @@
  */
 plugins {
     kotlin("multiplatform") version "1.9.0"
-    kotlin("plugin.serialization") version "1.9.0"
     signing
     `maven-publish`
 }
@@ -35,7 +34,6 @@ kotlin {
         commonMain {
             dependencies {
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
-                api("org.jetbrains.kotlinx:kotlinx-serialization-json:$serialization_version")
                 api("org.jetbrains.kotlinx:kotlinx-datetime:$datetime_version")
             }
         }

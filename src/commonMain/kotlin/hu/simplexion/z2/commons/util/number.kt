@@ -1,6 +1,21 @@
 package hu.simplexion.z2.commons.util
 
 /**
+ * Convert an int into a byte array (4 bytes).
+ */
+fun Int.toByteArray(): ByteArray = ByteArray(4).also { this.encodeInto(it) }
+
+/**
+ * Convert an int to bytes and write those bytes into [target] starting
+ * from [offset].
+ */
+fun Int.encodeInto(target: ByteArray, offset : Int = 0) {
+    for (i in 3 downTo 0) {
+        target[offset + i] = (this shr (8 * (3 - i))).toByte()
+    }
+}
+
+/**
  * Convert a long into a byte array (8 bytes).
  */
 fun Long.toByteArray(): ByteArray = ByteArray(8).also { this.encodeInto(it) }
