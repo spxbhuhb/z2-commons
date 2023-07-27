@@ -59,7 +59,7 @@ object ProtoLocalDate : ProtoDecoder<LocalDate>, ProtoEncoder<LocalDate> {
 object ProtoLocalDateTime : ProtoDecoder<LocalDateTime>, ProtoEncoder<LocalDateTime> {
 
     override fun decodeProto(message: ProtoMessage?): LocalDateTime {
-        if (message == null) return LocalDateTime(0,0,0,0,0,0,0)
+        if (message == null) return LocalDateTime(0,1,1,0,0,0,0)
         return LocalDateTime(
             message.int(1),
             message.int(2),
