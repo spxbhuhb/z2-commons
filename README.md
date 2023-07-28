@@ -14,7 +14,7 @@ Status: **experimental**
 ## Dependency
 
 ```kotlin
-implementation("hu.simplexion.z2:z2-commons:2023.7.20-SNAPSHOT")
+implementation("hu.simplexion.z2:z2-commons:2023.7.28")
 ```
 
 ## Packages
@@ -40,17 +40,19 @@ Functions for [Protocol Buffer](https://protobuf.dev/) messages.
 
 ## Utility
 
-| Type  | Name                                                                                      | Function                                                              | Platform |
-|-------|-------------------------------------------------------------------------------------------|-----------------------------------------------------------------------|----------|
-| fun   | [`ByteArray.toDotString`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/string.kt)  | Convert bytes to a "dot-string".                                      | Common   |
-| fun   | [`ByteArray.toUuid`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/uuid.kt)         | Convert bytes to UUID.                                                | Common   |
-| fun   | [`ByteArray.toLong`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/number.kt)       | Convert bytes to Long.                                                | Common   |
-| fun   | [`fourRandomInt`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/random.kt)          | Get 4 random Int values.                                              | Js, JVM  |
-| fun   | [`localLaunch`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/coroutines.kt)        | Create a scope with `Dispatchers.Default` and launch the block in it. | Common   |
-| fun   | [`Long.toByteArray`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/number.kt)       | Get a ByteArray that contains the long.                               | Common   |
-| fun   | [`Long.encodeInto`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/number.kt)        | Encode a Long into a ByteArray at a given offset.                     | Common   |
-| class | [`UUID`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/uuid.kt)                     | Type bound UUID 4 implementation                                      | Js, JVM  |
-| fun   | [`vmNowMicro`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/clock.kt)              | Virtual machine time in microseconds.                                 | Js, JVM  |
+| Type  | Name                                                                                     | Function                                                              | Platform |
+|-------|------------------------------------------------------------------------------------------|-----------------------------------------------------------------------|----------|
+| fun   | [`ByteArray.toDotString`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/string.kt) | Convert bytes to a "dot-string".                                      | Common   |
+| fun   | [`ByteArray.toUuid`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/uuid.kt)        | Convert bytes to UUID.                                                | Common   |
+| fun   | [`ByteArray.toLong`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/number.kt)      | Convert bytes to Long.                                                | Common   |
+| fun   | [`Int.toByteArray`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/number.kt)       | Get a ByteArray that contains the Int.                                | Common   |
+| fun   | [`Int.encodeInto`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/number.kt)        | Encode an Int into a ByteArray at a given offset.                     | Common   |
+| fun   | [`fourRandomInt`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/random.kt)         | Get 4 random Int values.                                              | Js, JVM  |
+| fun   | [`localLaunch`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/coroutines.kt)       | Create a scope with `Dispatchers.Default` and launch the block in it. | Common   |
+| fun   | [`Long.toByteArray`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/number.kt)      | Get a ByteArray that contains the long.                               | Common   |
+| fun   | [`Long.encodeInto`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/number.kt)       | Encode a Long into a ByteArray at a given offset.                     | Common   |
+| class | [`UUID`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/uuid.kt)                    | Type bound UUID 4 implementation                                      | Js, JVM  |
+| fun   | [`vmNowMicro`](src/commonMain/kotlin/hu/simplexion/z2/commons/util/clock.kt)             | Virtual machine time in microseconds.                                 | Js, JVM  |
 
 ## I18N
 
