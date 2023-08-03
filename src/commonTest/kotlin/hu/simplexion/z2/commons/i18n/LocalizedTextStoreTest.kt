@@ -15,4 +15,16 @@ class  LocalizedTextStoreTest {
         assertEquals("A", store.a.toString())
         assertEquals("B", store.b.toString())
     }
+
+    @Test
+    fun testSupport() {
+        val store = object : LocalizedTextStore(UUID()) {
+            val a by "A"
+            val b by a.support("B")
+        }
+        assertEquals("A", store.a.toString())
+        assertEquals("B", store.b.toString())
+        assertEquals("B", store.a.support.toString())
+    }
+
 }

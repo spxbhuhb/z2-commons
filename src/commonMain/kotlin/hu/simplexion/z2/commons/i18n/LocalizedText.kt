@@ -8,4 +8,12 @@ import hu.simplexion.z2.commons.util.PublicApi
  * for example.
  */
 @PublicApi
-interface LocalizedText
+interface LocalizedText {
+    val key : String
+
+    val support : LocalizedTextSupport?
+        get() {
+            if (this !is BasicLocalizedText) return null
+            return this.store.support[key]
+        }
+}

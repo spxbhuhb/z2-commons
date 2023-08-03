@@ -7,4 +7,6 @@ import hu.simplexion.z2.commons.util.PublicApi
  * expects an icon that should be localized.
  */
 @PublicApi
-interface LocalizedIcon
+interface LocalizedIcon {
+    val key: String
+}

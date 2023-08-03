@@ -19,7 +19,7 @@ open class LocalizedIconStore(
     }
 
     operator fun String.provideDelegate(thisRef: LocalizedIconStore, prop: KProperty<*>): ReadOnlyProperty<LocalizedIconStore, LocalizedIcon> {
-        thisRef.map[prop.name] = BasicLocalizedIcon(this)
+        thisRef.map[prop.name] = BasicLocalizedIcon(prop.name, this)
         return LocalizedTextDelegate()
     }
 }

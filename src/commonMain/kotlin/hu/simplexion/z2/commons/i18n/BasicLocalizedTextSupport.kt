@@ -1,8 +1,9 @@
 package hu.simplexion.z2.commons.i18n
 
-class BasicLocalizedIcon(
+class BasicLocalizedTextSupport(
     override val key : String,
+    override val supportFor: String,
     val value : String
-) : LocalizedIcon {
+) : LocalizedTextSupport {
     override fun toString(): String = value
 }

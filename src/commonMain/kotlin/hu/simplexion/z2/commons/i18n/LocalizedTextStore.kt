@@ -10,7 +10,8 @@ open class LocalizedTextStore(
     @PublicApi
     val uuid : UUID<LocalizedTextStore>
 ) {
-    val map: MutableMap<String, LocalizedText> = mutableMapOf()
+    val map = mutableMapOf<String, LocalizedText>()
+    val support = mutableMapOf<String, LocalizedTextSupport>()
 
     class LocalizedTextDelegate : ReadOnlyProperty<LocalizedTextStore, LocalizedText> {
         override fun getValue(thisRef: LocalizedTextStore, property: KProperty<*>): LocalizedText {
@@ -18,8 +19,20 @@ open class LocalizedTextStore(
         }
     }
 
+    fun LocalizedText.support(text : String) : Pair<LocalizedText,String> {
+        return this to text
+    }
+
     operator fun String.provideDelegate(thisRef: LocalizedTextStore, prop: KProperty<*>): ReadOnlyProperty<LocalizedTextStore, LocalizedText> {
-        thisRef.map[prop.name] = BasicLocalizedText(this)
+        thisRef.map[prop.name] = BasicLocalizedText(prop.name, this, thisRef)
+        return LocalizedTextDelegate()
+    }
+
+    operator fun Pair<LocalizedText,String>.provideDelegate(thisRef: LocalizedTextStore, prop: KProperty<*>): ReadOnlyProperty<LocalizedTextStore, LocalizedText> {
+        BasicLocalizedTextSupport(prop.name, this.first.key, this.second).also {
+            thisRef.map[prop.name] = it
+            thisRef.support[it.supportFor] = it
+        }
         return LocalizedTextDelegate()
     }
 }
