@@ -1,5 +1,5 @@
 package hu.simplexion.z2.commons.i18n
 
-val localizedTextRegistry = mutableListOf<LocalizedTextStore>()
+val textStoreRegistry = mutableListOf<LocalizedTextStore>()
 
-val localizedIconRegistry = mutableListOf<LocalizedIconStore>()
+val iconStoreRegistry = mutableListOf<LocalizedIconStore>()
