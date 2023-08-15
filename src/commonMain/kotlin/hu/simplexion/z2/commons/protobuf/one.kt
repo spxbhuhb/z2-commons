@@ -1,6 +1,7 @@
 package hu.simplexion.z2.commons.protobuf
 
 import hu.simplexion.z2.commons.util.UUID
+import kotlin.enums.EnumEntries
 
 
 object ProtoOneUnit : ProtoDecoder<Unit> {
@@ -173,4 +174,36 @@ class ProtoOneInstanceList<T>(val decoder: ProtoDecoder<T>) : ProtoDecoder<List<
 class ProtoOneInstanceListOrNull<T>(val decoder: ProtoDecoder<T>) : ProtoDecoder<List<T>?> {
     override fun decodeProto(message: ProtoMessage?): List<T>? =
         message?.instanceListOrNull(1, 2, decoder)
+}
+
+// ---------------------------------------------------------------------------
+// Enum
+// ---------------------------------------------------------------------------
+
+class ProtoOneEnum<E : Enum<E>>(val entries : EnumEntries<E>) : ProtoDecoder<E> {
+    override fun decodeProto(message: ProtoMessage?): E {
+        if (message == null) return entries.first()
+        return entries[message.int(1)]
+    }
+}
+
+class ProtoOneEnumOrNull<E : Enum<E>>(val entries : EnumEntries<E>) : ProtoDecoder<E?> {
+    override fun decodeProto(message: ProtoMessage?): E? {
+        if (message == null) return null
+        return message.intOrNull(1, 2)?.let { entries[it] }
+    }
+}
+
+class ProtoOneEnumList<E: Enum<E>>(val entries : EnumEntries<E>) : ProtoDecoder<List<E>> {
+    override fun decodeProto(message: ProtoMessage?): List<E> {
+        if (message == null) return emptyList()
+        return message.intList(1).map { entries[it] }
+    }
+}
+
+class ProtoOneEnumListOrNull<E : Enum<E>>(val entries : EnumEntries<E>) : ProtoDecoder<List<E>?> {
+    override fun decodeProto(message: ProtoMessage?): List<E>? {
+        if (message == null) return null
+        return message.intListOrNull(1, 2)?.map { entries[it] }
+    }
 }

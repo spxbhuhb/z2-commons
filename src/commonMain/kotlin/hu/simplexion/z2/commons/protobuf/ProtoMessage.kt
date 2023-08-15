@@ -103,7 +103,7 @@ class ProtoMessage(
         if (get(nullFieldNumber) != null) null else uuidList(fieldNumber)
 
     // -----------------------------------------------------------------------------------------
-    // Non-Primitive
+    // Instance
     // -----------------------------------------------------------------------------------------
 
     fun <T> instance(fieldNumber: Int, decoder: ProtoDecoder<T>): T {
@@ -114,10 +114,6 @@ class ProtoMessage(
 
     fun <T> instanceOrNull(fieldNumber: Int, nullFieldNumber: Int, decoder: ProtoDecoder<T>): T? =
         if (get(nullFieldNumber) != null) null else instance(fieldNumber, decoder)
-
-    // -----------------------------------------------------------------------------------------
-    // Non-Scalar List
-    // -----------------------------------------------------------------------------------------
 
     fun <T> instanceList(fieldNumber: Int, decoder: ProtoDecoder<T>): MutableList<T> {
         val list = mutableListOf<T>()

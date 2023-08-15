@@ -15,6 +15,7 @@ class ProtoBuiltinTest {
     val byteArrayVal = byteArrayOf(9, 8, 7)
     val uuidVal = UUID<Any>()
     val instanceVal = A(true, 12, "hello")
+    val enumVal = E.V1
 
     val booleanListVal = listOf(true, false, true)
     val intListVal = listOf(1, 2, 3)
@@ -22,6 +23,7 @@ class ProtoBuiltinTest {
     val stringListVal = listOf("a", "b", "c")
     val byteArrayListVal = listOf(byteArrayOf(1), byteArrayOf(2), byteArrayOf(3))
     val uuidListVal = listOf(UUID<Any>(), UUID(), UUID())
+    val enumListVal = listOf(E.V2, E.V1)
 
     val instanceListVal = listOf(
         B(A(true, 123, "a", mutableListOf(1, 2, 3)), "AA"),
@@ -213,6 +215,10 @@ class ProtoBuiltinTest {
         assertEquals(null, ProtoOneInstanceOrNull(A).decode { instanceOrNull(1, 2, A, null) })
         assertEquals(instanceVal, ProtoOneInstanceOrNull(A).decode { instanceOrNull(1, 2, A, instanceVal) })
 
+        assertEquals(enumVal, ProtoOneEnum(E.entries).decode { int(1, enumVal.ordinal) })
+        assertEquals(null, ProtoOneEnumOrNull(E.entries).decode { intOrNull(1, 2, null) })
+        assertEquals(enumVal, ProtoOneEnumOrNull(E.entries).decode { intOrNull(1, 2, enumVal.ordinal) })
+
         assertContentEquals(booleanListVal, ProtoOneBooleanList.decode { booleanList(1, booleanListVal) })
         assertEquals(null, ProtoOneBooleanListOrNull.decode { booleanOrNull(1, 2, null) })
         assertEquals(booleanListVal, ProtoOneBooleanListOrNull.decode { booleanListOrNull(1, 2, booleanListVal) })
@@ -244,5 +250,9 @@ class ProtoBuiltinTest {
         assertContentEquals(instanceListVal, ProtoOneInstanceList(B).decode { instanceList(1, B, instanceListVal) })
         assertEquals(null, ProtoOneInstanceListOrNull(B).decode { instanceOrNull(1, 2, B, null) })
         assertEquals(instanceListVal, ProtoOneInstanceListOrNull(B).decode { instanceListOrNull(1, 2, B, instanceListVal) })
+
+        assertEquals(enumListVal, ProtoOneEnumList(E.entries).decode { intList(1, enumListToOrdinals(enumListVal)) })
+        assertEquals(null, ProtoOneEnumListOrNull(E.entries).decode { intListOrNull(1, 2, null) })
+        assertEquals(enumListVal, ProtoOneEnumListOrNull(E.entries).decode { intListOrNull(1, 2, enumListToOrdinals(enumListVal)) })
     }
 }
