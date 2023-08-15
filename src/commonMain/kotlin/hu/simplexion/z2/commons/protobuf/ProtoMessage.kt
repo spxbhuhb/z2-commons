@@ -88,7 +88,6 @@ class ProtoMessage(
     fun byteArrayListOrNull(fieldNumber: Int, nullFieldNumber: Int): List<ByteArray>? =
         if (get(nullFieldNumber) != null) null else byteArrayList(fieldNumber)
 
-
     // -----------------------------------------------------------------------------------------
     // UUID
     // -----------------------------------------------------------------------------------------

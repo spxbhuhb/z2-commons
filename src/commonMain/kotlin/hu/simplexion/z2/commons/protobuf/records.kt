@@ -10,7 +10,7 @@ interface ProtoRecord {
     val value : ULong
 
     fun string(): String {
-        check(this is LenProtoRecord)
+        check(this is LenProtoRecord) { "not a LEN record, fieldNumber=$fieldNumber"}
         return byteArray.decodeToString(offset, offset + length)
     }
 
