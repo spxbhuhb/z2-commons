@@ -14,7 +14,7 @@ Status: **experimental**
 ## Dependency
 
 ```kotlin
-implementation("hu.simplexion.z2:z2-commons:2023.7.28")
+implementation("hu.simplexion.z2:z2-commons:2023.8.15")
 ```
 
 ## Packages
